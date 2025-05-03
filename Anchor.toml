@@ -1,0 +1,22 @@
+[toolchain]
+package_manager = "yarn"
+
+[features]
+resolution = true
+skip-lint = false
+
+[programs.localnet]
+quorum = "9UCzUYTVHWZ1wEEv8r7RbDbqouiyEUxyuPfdSifg2KAu"
+
+[programs.devnet]
+quorum = "9UCzUYTVHWZ1wEEv8r7RbDbqouiyEUxyuPfdSifg2KAu"
+
+[registry]
+url = "https://api.apr.dev"
+
+[provider]
+cluster = "Devnet"
+wallet = "~/.config/solana/new-wallet.json"
+
+[scripts]
+test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
