@@ -52,7 +52,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-purple-950 to-slate-900 text-white">
+    <div className="min-h-screen bg-black text-white">
       <header
         className={`fixed w-full z-50 transition-all duration-300 ${
           scrolled
@@ -81,7 +81,7 @@ export default function Home() {
           </nav>
 
           <div className="hidden md:block">
-            <WalletMultiButton className="!bg-purple-600 hover:!bg-purple-700 !text-white !px-6 !py-2 !rounded-lg !transition-all !shadow-md hover:!shadow-lg" />
+            <WalletMultiButton />
           </div>
 
           <button
@@ -162,23 +162,23 @@ export default function Home() {
                 <>
                   <Button
                     variant="outline"
-                    className="border-purple-500 text-white hover:bg-purple-950/50 px-8 py-4 text-lg rounded-lg"
                     onClick={() => router.push("/polls")}
                   >
-                    Learn More <ChevronRight className="ml-2 h-5 w-5" />
+                    Get Started <ChevronRight className="ml-2 h-5 w-5" />
                   </Button>
                 </>
               ) : (
                 <>
                   <Button
+                    variant="outline"
                     onClick={() => router.push("/polls")}
-                    className="bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white px-8 py-6 text-lg rounded-lg shadow-lg hover:shadow-xl transition-all"
                   >
                     Go to Polls
                   </Button>
                   <Button
                     variant="outline"
-                    className="border-purple-500 text-white hover:bg-purple-950/50 px-8 py-6 text-lg rounded-lg"
+                    className="border-purple-500 text-whi te hover:bg-purple-950/50"
+                    onClick={() => router.push("/create")}
                   >
                     Create New Poll <ChevronRight className="ml-2 h-5 w-5" />
                   </Button>
@@ -354,7 +354,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="bg-slate-900 py-12 border-t border-gray-800">
+      <footer className="bg-black py-8 border-t border-gray-800">
         <div className="container mx-auto px-4">
           <div className="mb-8">
             <div>
@@ -371,32 +371,26 @@ export default function Home() {
                 transparent, and efficient.
               </p>
               <div className="flex gap-4 justify-center">
-                <a
-                  href="#"
+                <Link
+                  href="https://twitter.com/makantersera"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   <Twitter className="h-5 w-5" />
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  href="https://github.com/ameliazsabrina"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   <Github className="h-5 w-5" />
-                </a>
-                <a
-                  href="#"
+                </Link>
+                <Link
+                  href="https://www.linkedin.com/in/ameliazakiyasabrina/"
                   className="text-gray-400 hover:text-white transition-colors"
                 >
                   <Linkedin className="h-5 w-5" />
-                </a>
+                </Link>
               </div>
             </div>
-          </div>
-
-          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-center items-center">
-            <p className="text-gray-400 text-sm">
-              Quorum made for practicing Solana Blockchain by @makantersera
-            </p>
           </div>
         </div>
       </footer>

@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../store/store";
 import { setRegModal } from "../store/states/globalStates";
@@ -18,10 +18,9 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 
-const CandidatesRegister = ({
+const RegCandidate = ({
   pollId,
   pollAddress,
 }: {
@@ -30,10 +29,17 @@ const CandidatesRegister = ({
 }) => {
   const { publicKey, sendTransaction, signTransaction } = useWallet();
   const [candidateName, setCandidateName] = useState<string>("");
-  const [open, setOpen] = useState(false);
 
   const dispatch = useDispatch();
   const { regModal } = useSelector((states: RootState) => states.globalStates);
+
+  // Determine if modal is open based on Redux state
+  const isOpen = regModal === "scale-100";
+
+  // Handle modal close
+  const handleOpenChange = (open: boolean) => {
+    dispatch(setRegModal(open ? "scale-100" : "scale-0"));
+  };
 
   const program = useMemo(
     () => getProvider(publicKey, signTransaction, sendTransaction),
@@ -55,7 +61,7 @@ const CandidatesRegister = ({
           );
 
           setCandidateName("");
-          setOpen(false);
+          dispatch(setRegModal("scale-0")); // Close modal after success
 
           await fetchPollDetails(program, pollAddress);
           await fetchAllCandidates(program, pollAddress);
@@ -76,26 +82,31 @@ const CandidatesRegister = ({
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="sm:max-w-[425px]">
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
+      <DialogContent className="sm:max-w-[425px] max-w-[90%] mx-auto bg-slate-800 text-white border-purple-500">
         <DialogHeader>
-          <DialogTitle>Register Candidate</DialogTitle>
+          <DialogTitle className="text-white text-xl">
+            Register Candidate
+          </DialogTitle>
         </DialogHeader>
         <form className="space-y-6" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <Label htmlFor="candidateName">Candidate Name</Label>
+            <Label htmlFor="candidateName" className="text-gray-200">
+              Candidate Name
+            </Label>
             <Input
               id="candidateName"
               placeholder="Enter candidate name..."
               required
               value={candidateName}
               onChange={(e) => setCandidateName(e.target.value)}
+              className="bg-slate-700 text-white border-slate-600 focus:border-purple-500"
             />
           </div>
 
           <Button
             type="submit"
-            className="w-full"
+            className="w-full bg-purple-600 hover:bg-purple-700 text-white"
             disabled={!program || !publicKey}
           >
             Register
@@ -106,4 +117,4 @@ const CandidatesRegister = ({
   );
 };
 
-export default CandidatesRegister;
+export default RegCandidate;

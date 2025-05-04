@@ -1,13 +1,14 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   getReadonlyProvider,
   fetchPollDetails,
   fetchAllCandidates,
 } from "../../../hooks";
-import { RootState } from "../../../store/store";
+import type { RootState } from "../../../store/store";
 import { useParams } from "next/navigation";
+import Navbar from "@/components/Navbar";
 import RegCandidate from "../../../components/CandidatesRegist";
 import {
   FaRegEdit,
@@ -15,6 +16,8 @@ import {
   FaUsers,
   FaCalendarAlt,
   FaInfoCircle,
+  FaArrowLeft,
+  FaChartBar,
 } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { useWallet } from "@solana/wallet-adapter-react";
@@ -32,15 +35,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 import { DeletePollButton } from "@/components/DeletePollButton";
+import Link from "next/link";
 
 export default function PollDetails() {
   const { pollId } = useParams();
@@ -157,23 +155,23 @@ export default function PollDetails() {
 
   if (isLoading) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4 ">
-        <Card className="w-full max-w-3xl">
-          <CardHeader>
-            <Skeleton className="h-8 w-3/4 mb-2" />
-            <Skeleton className="h-4 w-1/2" />
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-b from-slate-900 via-purple-950 to-slate-900">
+        <Card className="w-full max-w-3xl bg-slate-800/50 backdrop-blur-sm border-purple-900/50">
+          <CardHeader className="bg-slate-800/70">
+            <Skeleton className="h-8 w-3/4 mb-2 bg-slate-700" />
+            <Skeleton className="h-4 w-1/2 bg-slate-700" />
           </CardHeader>
           <CardContent className="space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <Skeleton className="h-16 w-full" />
-              <Skeleton className="h-16 w-full" />
+              <Skeleton className="h-16 w-full bg-slate-700" />
+              <Skeleton className="h-16 w-full bg-slate-700" />
             </div>
-            <Separator />
-            <Skeleton className="h-6 w-1/3" />
-            <Skeleton className="h-10 w-full" />
+            <Separator className="bg-slate-700" />
+            <Skeleton className="h-6 w-1/3 bg-slate-700" />
+            <Skeleton className="h-10 w-full bg-slate-700" />
             <div className="space-y-4">
-              <Skeleton className="h-24 w-full" />
-              <Skeleton className="h-24 w-full" />
+              <Skeleton className="h-24 w-full bg-slate-700" />
+              <Skeleton className="h-24 w-full bg-slate-700" />
             </div>
           </CardContent>
         </Card>
@@ -183,16 +181,22 @@ export default function PollDetails() {
 
   if (error) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <Card className="w-full max-w-md border-red-200">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-b from-slate-900 via-purple-950 to-slate-900">
+        <Navbar />
+        <Card className="w-full max-w-md bg-slate-800/50 backdrop-blur-sm border-red-500/50">
           <CardHeader>
-            <CardTitle className="text-red-500">Error</CardTitle>
-            <CardDescription>{error}</CardDescription>
+            <CardTitle className="text-red-400">Error</CardTitle>
+            <CardDescription className="text-gray-300">{error}</CardDescription>
           </CardHeader>
           <CardFooter>
-            <Button variant="outline" onClick={() => window.history.back()}>
-              Go Back
-            </Button>
+            <Link href="/polls">
+              <Button
+                variant="outline"
+                className="border-purple-500 text-white hover:bg-purple-950/50"
+              >
+                Return to Polls
+              </Button>
+            </Link>
           </CardFooter>
         </Card>
       </div>
@@ -201,18 +205,24 @@ export default function PollDetails() {
 
   if (!poll) {
     return (
-      <div className="flex flex-col items-center justify-center min-h-screen p-4">
-        <Card className="w-full max-w-md">
+      <div className="flex flex-col items-center justify-center min-h-screen p-4 bg-gradient-to-b from-slate-900 via-purple-950 to-slate-900">
+        <Navbar />
+        <Card className="w-full max-w-md bg-slate-800/50 backdrop-blur-sm border-purple-900/50">
           <CardHeader>
-            <CardTitle>Poll Not Found</CardTitle>
-            <CardDescription>
+            <CardTitle className="text-white">Poll Not Found</CardTitle>
+            <CardDescription className="text-gray-300">
               The requested poll could not be found.
             </CardDescription>
           </CardHeader>
           <CardFooter>
-            <Button variant="outline" onClick={() => window.history.back()}>
-              Return to Polls
-            </Button>
+            <Link href="/polls">
+              <Button
+                variant="outline"
+                className="border-purple-500 text-white hover:bg-purple-950/50"
+              >
+                Return to Polls
+              </Button>
+            </Link>
           </CardFooter>
         </Card>
       </div>
@@ -234,160 +244,183 @@ export default function PollDetails() {
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-4 bg-gradient-to-b from-slate-900 via-purple-950 to-slate-900 text-white ">
-      <Card className="w-full max-w-4xl shadow-lg mb-8">
-        <CardHeader className="bg-gradient-to-r from-indigo-50 to-blue-50 rounded-t-lg">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center">
-              <CardTitle className="text-3xl font-bold text-indigo-900">
-                {poll.name}
-              </CardTitle>
-              {getPollStatusBadge()}
-            </div>
-            <div className="flex items-center">
-              <DeletePollButton pollId={poll.id} />
-            </div>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex items-center text-base font-medium text-indigo-600">
-                    <FaClock className="mr-2" />
-                    {timeRemaining}
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>
-                    {isPollActive()
-                      ? "Running poll"
-                      : isPollUpcoming()
-                      ? "Poll starts soon"
-                      : "Poll has concluded"}
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
-          <Progress value={progressPercentage} className="h-2 mb-4" />
-          <CardDescription className="text-lg mt-2 text-gray-700">
-            {poll.description}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-6 py-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="border-0 shadow-sm bg-blue-50">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-blue-100 rounded-full">
-                    <FaCalendarAlt className="h-5 w-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-gray-700">
-                      Start Time
-                    </p>
-                    <p className="text-base font-medium">
-                      {new Date(poll.startTime).toLocaleDateString(undefined, {
-                        weekday: "short",
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-purple-950 to-slate-900 text-white">
+      <Navbar />
+      <div className="container mx-auto px-4 py-16 items-center flex flex-col">
+        <div className="w-full max-w-4xl mb-6">
+          <Link href="/polls">
+            <Button
+              variant="ghost"
+              className="text-gray-300 hover:text-white hover:bg-slate-800/50"
+            >
+              <FaArrowLeft className="mr-2" /> Back to Polls
+            </Button>
+          </Link>
+        </div>
 
-            <Card className="border-0 shadow-sm bg-purple-50">
-              <CardContent className="p-4">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 bg-purple-100 rounded-full">
-                    <FaClock className="h-5 w-5 text-purple-600" />
-                  </div>
-                  <div>
-                    <p className="text-sm font-semibold text-gray-700">
-                      End Time
-                    </p>
-                    <p className="text-base font-medium">
-                      {new Date(poll.endTime).toLocaleDateString(undefined, {
-                        weekday: "short",
-                        month: "short",
-                        day: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Separator className="my-6" />
-
-          <div className="flex flex-col">
-            <div className="flex items-center mb-4 space-x-2">
-              <div className="p-2 bg-green-100 rounded-full">
-                <FaUsers className="h-5 w-5 text-green-600" />
+        <Card className="w-full max-w-4xl shadow-lg mb-8 bg-slate-800/50 backdrop-blur-sm border-purple-900/50 hover:border-purple-700/50 transition-all">
+          <CardHeader className="bg-gradient-to-r from-slate-800/70 to-purple-900/50 rounded-t-lg">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-3 flex-wrap">
+                <CardTitle className="text-3xl font-bold text-white break-words">
+                  {poll.name}
+                </CardTitle>
+                {getPollStatusBadge()}
               </div>
-              <h3 className="text-xl font-semibold">
-                Candidates
-                <span className="ml-2 text-base text-gray-500">
-                  ({candidates.length} registered)
-                </span>
-              </h3>
+              <div className="flex items-center">
+                <DeletePollButton pollId={poll.id} />
+              </div>
+            </div>
+            <div className="flex items-center text-base font-medium text-purple-300 mb-2">
+              <FaClock className="mr-2" />
+              {timeRemaining}
+            </div>
+            <Progress
+              value={progressPercentage}
+              className="h-2 mb-4 bg-slate-700"
+            />
+            <CardDescription className="text-lg mt-2 text-gray-300">
+              {poll.description}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6 py-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <Card className="border-0 shadow-sm bg-slate-700/50">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-indigo-900/50 rounded-full">
+                      <FaCalendarAlt className="h-5 w-5 text-indigo-300" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-300">
+                        Start Time
+                      </p>
+                      <p className="text-base font-medium text-white">
+                        {new Date(poll.startTime).toLocaleDateString(
+                          undefined,
+                          {
+                            weekday: "short",
+                            month: "short",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card className="border-0 shadow-sm bg-slate-700/50">
+                <CardContent className="p-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="p-2 bg-purple-900/50 rounded-full">
+                      <FaClock className="h-5 w-5 text-purple-300" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-semibold text-gray-300">
+                        End Time
+                      </p>
+                      <p className="text-base font-medium text-white">
+                        {new Date(poll.endTime).toLocaleDateString(undefined, {
+                          weekday: "short",
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
             </div>
 
-            {publicKey && isPollActive() && (
-              <div className="bg-gradient-to-r from-blue-100 to-indigo-100 p-4 rounded-lg mb-6">
-                <div className="flex items-center justify-between">
-                  <div className="space-y-1">
-                    <h3 className="font-semibold text-indigo-900">
-                      Want to participate?
-                    </h3>
-                    <p className="text-sm text-gray-700">
-                      Register now to become a candidate in this poll
-                    </p>
-                  </div>
-                  <Button
-                    className="bg-indigo-600 hover:bg-indigo-700"
-                    onClick={() => dispatch(setRegModal("scale-100"))}
-                  >
-                    <span className="flex items-center justify-center gap-2">
-                      Register as Candidate
-                      <FaRegEdit />
-                    </span>
-                  </Button>
-                </div>
-              </div>
+            {!isPollActive() && !isPollUpcoming() && (
+              <Link href={`/polls/${pollId}/results`}>
+                <Button className="w-full bg-purple-600 hover:bg-purple-700 mt-4">
+                  <span className="flex items-center justify-center gap-2">
+                    View Results
+                    <FaChartBar />
+                  </span>
+                </Button>
+              </Link>
             )}
 
-            {candidates.length > 0 ? (
-              <CandidateList
-                candidates={candidates}
-                pollAddress={poll.publicKey}
-                pollId={poll.id}
-              />
-            ) : (
-              <div className="text-center py-12 bg-gray-50 rounded-lg border border-dashed border-gray-300">
-                <FaInfoCircle className="w-10 h-10 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-lg font-medium text-gray-700">
-                  No Candidates Yet
+            <Separator className="my-6 bg-slate-700/50" />
+
+            <div className="flex flex-col">
+              <div className="flex items-center mb-4 space-x-2">
+                <div className="p-2 bg-purple-900/50 rounded-full">
+                  <FaUsers className="h-5 w-5 text-purple-300" />
+                </div>
+                <h3 className="text-xl font-semibold text-white">
+                  Candidates
+                  <span className="ml-2 text-base text-gray-400">
+                    ({candidates.length} registered)
+                  </span>
                 </h3>
-                <p className="text-gray-500 mt-2">
-                  {isPollActive()
-                    ? "Be the first to register as a candidate!"
-                    : isPollUpcoming()
-                    ? "Candidate registration will open when the poll starts."
-                    : "This poll ended with no registered candidates."}
-                </p>
               </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
 
-      {pollId && <RegCandidate pollId={poll.id} pollAddress={poll.publicKey} />}
+              {publicKey && isPollActive() && (
+                <div className="bg-gradient-to-r from-indigo-900/30 to-purple-900/30 p-4 rounded-lg mb-6 border border-indigo-500/30">
+                  <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div className="space-y-1">
+                      <h3 className="font-semibold text-white">
+                        Want to participate?
+                      </h3>
+                      <p className="text-sm text-gray-300">
+                        Register now to become a candidate in this poll
+                      </p>
+                    </div>
+                    <Button
+                      className="bg-indigo-600 hover:bg-indigo-700 whitespace-nowrap"
+                      onClick={() => dispatch(setRegModal("scale-100"))}
+                    >
+                      <span className="flex items-center justify-center gap-2">
+                        Register as Candidate
+                        <FaRegEdit />
+                      </span>
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {candidates.length > 0 ? (
+                <div className="flex flex-col gap-4 items-center">
+                  <CandidateList
+                    candidates={candidates}
+                    pollAddress={poll.publicKey}
+                    pollId={poll.id}
+                  />
+                </div>
+              ) : (
+                <div className="text-center py-12 bg-slate-700/30 rounded-lg border border-dashed border-slate-600">
+                  <FaInfoCircle className="w-10 h-10 text-gray-400 mx-auto mb-4" />
+                  <h3 className="text-lg font-medium text-gray-300">
+                    No Candidates Yet
+                  </h3>
+                  <p className="text-gray-400 mt-2">
+                    {isPollActive()
+                      ? "Be the first to register as a candidate!"
+                      : isPollUpcoming()
+                      ? "Candidate registration will open when the poll starts."
+                      : "This poll ended with no registered candidates."}
+                  </p>
+                </div>
+              )}
+            </div>
+          </CardContent>
+        </Card>
+
+        {pollId && poll && (
+          <RegCandidate
+            pollId={parseInt(poll.id.toString())}
+            pollAddress={poll.publicKey}
+          />
+        )}
+      </div>
     </div>
   );
 }

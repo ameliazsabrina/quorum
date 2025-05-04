@@ -20,6 +20,7 @@ const CandidatesList = ({ candidates, pollAddress, pollId }: Props) => {
     () => getProvider(publicKey, signTransaction, sendTransaction),
     [publicKey, signTransaction, sendTransaction]
   );
+
   const fetchVotingStatus = async () => {
     const status = await hasUserVoted(program!, publicKey!, pollId);
     setVoted(status);
@@ -68,26 +69,28 @@ const CandidatesList = ({ candidates, pollAddress, pollId }: Props) => {
   };
 
   return (
-    <div className="bg-white border border-gray-300 rounded-xl shadow-lg p-6 w-4/5 md:w-3/5 space-y-4 text-center">
-      <div className="space-y-2">
+    <div className="bg-slate-800/70 border border-purple-500/30 rounded-xl shadow-lg p-4 md:p-6 w-full space-y-4">
+      <div className="space-y-4">
         {candidates.map((candidate) => (
           <div
             key={candidate.publicKey}
-            className="flex justify-between items-center border-b border-gray-300 last:border-none pb-4 last:pb-0"
+            className="flex flex-col sm:flex-row justify-between items-center border-b border-slate-700 last:border-none pb-4 last:pb-0 gap-3"
           >
-            <span className="text-gray-800 font-medium">{candidate.name}</span>
-            <span className="text-gray-600 text-sm flex items-center space-x-2">
-              <Button
-                onClick={() => handleVote(candidate)}
-                className={`bg-${voted ? "red" : "green"}-100 text-${
-                  voted ? "red" : "green"
-                }-700 ${!voted && "hover:bg-green-200"} rounded`}
-                disabled={voted || !publicKey}
-              >
-                {voted ? "Voted" : "Vote"}{" "}
-                <span className="font-semibold">{candidate.votes}</span>
-              </Button>
+            <span className="text-white font-medium text-center sm:text-left">
+              {candidate.name}
             </span>
+            <Button
+              onClick={() => handleVote(candidate)}
+              className={
+                voted
+                  ? "bg-slate-700 text-gray-300"
+                  : "bg-indigo-600 text-white hover:bg-indigo-700"
+              }
+              disabled={voted || !publicKey}
+            >
+              {voted ? "Voted" : "Vote"}{" "}
+              <span className="font-semibold ml-1">{candidate.votes}</span>
+            </Button>
           </div>
         ))}
       </div>
