@@ -22,6 +22,8 @@ import {
 import Link from "next/link";
 import Image from "next/image";
 
+export const runtime = "edge";
+
 export default function Home() {
   const { publicKey } = useWallet();
   const router = useRouter();

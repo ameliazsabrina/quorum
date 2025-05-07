@@ -40,6 +40,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { DeletePollButton } from "@/components/DeletePollButton";
 import Link from "next/link";
 
+export const runtime = "edge";
+
 export default function PollDetails() {
   const { pollId } = useParams();
   const { publicKey } = useWallet();

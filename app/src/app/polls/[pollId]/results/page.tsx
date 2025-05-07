@@ -44,6 +44,8 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 
+export const runtime = "edge";
+
 export default function PollResults() {
   const { pollId } = useParams();
   const { publicKey } = useWallet();

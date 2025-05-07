@@ -30,6 +30,8 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 
+export const runtime = "edge";
+
 export default function CreatePollPage() {
   const { publicKey, sendTransaction, signTransaction } = useWallet();
   const [nextCount, setNextCount] = useState<BN>(new BN(0));

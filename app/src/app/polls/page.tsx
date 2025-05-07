@@ -28,6 +28,8 @@ import { FaPlus, FaClock, FaUsers, FaCalendarAlt } from "react-icons/fa";
 import { Progress } from "@/components/ui/progress";
 import { Skeleton } from "@/components/ui/skeleton";
 
+export const runtime = "edge";
+
 export default function PollsPage() {
   const [polls, setPolls] = useState<Poll[]>([]);
   const [isLoading, setIsLoading] = useState(true);
